@@ -1,4 +1,4 @@
-
+import java.util.Arrays;
 
 public class Card {
     // array of data
@@ -7,20 +7,15 @@ public class Card {
     private int count = 0;
     private int[] manaCost; //red blue green white black colorless
 
-    /**
-     * Constructor for objects of class NumberData
-     */
+
     public Card(String title, int power, int toughness, int[] mana) {
         name = title;
         strength = power;
         defense = toughness;
-        mana = manaCost;
-
+        manaCost = mana;
     }
 
-    public int getStrength() {
-        return strength;
-    }
+    public int getStrength() { return strength; }
 
     public int getToughness() {
         return defense;
@@ -31,7 +26,7 @@ public class Card {
     }
 
 
-    public int[] getMana(int num) {
+    public int[] getMana() {
         return manaCost;
     }
 
@@ -46,11 +41,12 @@ public class Card {
             uncolored += totalMana[z];
         }
         if (uncolored >= manaCost[5]) return true;
+        else return false;
     }
 
     public String toString() {
         String report = new String("");
-        report.concat("\t" + name + "[" + strength + "/" + defense + "]");
+        report = report.concat("" + name + "\t"+ "[" + strength + "/" + defense + "]" + "\t" + Arrays.toString(manaCost));
         return report;
     }
 

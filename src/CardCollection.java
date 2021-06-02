@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CardCollection  {
     ArrayList<Card> hand = new ArrayList<>();
@@ -9,10 +10,12 @@ public class CardCollection  {
     ArrayList<Card> AIBF = new ArrayList<>();
     ArrayList<Card> AIdeck = new ArrayList<>();
     private int count = 0;
-    private int[] LandCost = new int[]{0, 0, 0, 0, 0, 0};
+    private final int[] LandCost = new int[]{0, 0, 0, 0, 0, 0};
+    int[] tmhkCost = new int[]{2, 0, 0, 0, 0, 3};
     private int limit;
-    Card thundermawhellkite = new Card("Thundermaw Hellkite", 5, 5, {2, 0, 0, 0, 0, 3});
-    private int[] totalMana {0, 0, 0, 0, 0, 0};
+    Random gen = new Random();
+    Card thundermawhellkite = new Card("Thundermaw Hellkite", 5, 5, tmhkCost);
+    private int[] totalMana = new int[]{0, 0, 0, 0, 0, 0};
     Card mountainsPlaceholder = new Card("Mountains", 0, 0, LandCost);
     Card islandPlaceholder = new Card("Island", 0, 0, LandCost);
     Card forestPlaceholder = new Card("Forest", 0, 0, LandCost);
@@ -24,8 +27,15 @@ public class CardCollection  {
 
 
     public CardCollection () {
+        hand.add(thundermawhellkite);
+        hand.add(thundermawhellkite);
+        hand.add(mountainsPlaceholder);
+        hand.add(mountainsPlaceholder);
+        hand.add(mountainsPlaceholder);
+        hand.add(mountainsPlaceholder);
+        hand.add(mountainsPlaceholder);
         for(int i = 0; i < 7; i++) {
-            hand.add(thundermawhellkite);
+            AIhand.add(thundermawhellkite);
         }
 
     }
@@ -34,14 +44,14 @@ public class CardCollection  {
         else return false;
     }
     public void cast(int castNum){
-        if(hand.get(castNum).getName() == "Mountains") addMountain(castNum);
-        else if(hand.get(castNum).getName() == "Island") addForest(castNum);
-        else if(hand.get(castNum).getName() == "Forest") addForest(castNum);
-        else if(hand.get(castNum).getName() == "Plains") addPlains(castNum);
-        else if(hand.get(castNum).getName() == "Swamp") addSwamps(castNum);
+        if(hand.get(castNum).getName().equals("Mountains")) addMountains(castNum);
+        else if(hand.get(castNum).getName().equals("Island")) addIsland(castNum);
+        else if(hand.get(castNum).getName().equals("Forest")) addForest(castNum);
+        else if(hand.get(castNum).getName().equals("Plains")) addPlains(castNum);
+        else if(hand.get(castNum).getName().equals("Swamp")) addSwamps(castNum);
 
         else {
-            if(isEnoughMana()) {
+            if(hand.get(castNum).isEnoughMana(totalMana)) {
                 PlayerBF.add(hand.get(castNum));
                 hand.remove(castNum);
                 System.out.println("you casted " + PlayerBF.get(PlayerBF.size() - 1).getName());
@@ -57,35 +67,48 @@ public class CardCollection  {
 
 
     public void addMountains(int castNum){
-        manaCost[0]++;
+        totalMana[0]++;
         hand.remove(castNum);
     }
 
     public void addIsland(int castNum){
-        manaCost[1]++;
+        totalMana[1]++;
         hand.remove(castNum);
     }
     public void addForest(int castNum){
-        manaCost[2]++;
+        totalMana[2]++;
         hand.remove(castNum);
     }
     public void addPlains(int castNum){
-        manaCost[3]++;
+        totalMana[3]++;
         hand.remove(castNum);
     }
     public void addSwamps(int castNum){
-        manaCost[4]++;
+        totalMana[4]++;
         hand.remove(castNum);
     }
 
-    public int[] getTotalMana(){
-        return totalMana;
+    public int getMountains(){
+        return totalMana[0];
+    }
+    public int getIslands(){
+        return totalMana[1];
+    }
+    public int getForests(){
+        return totalMana[2];
+    }
+    public int getPlains(){
+        return totalMana[3];
+    }
+    public int getSwamps(){
+        return totalMana[4];
     }
     public void draw(){
-        //int handSize = hand.size();
-        //for(int i = handSize; i==6; i++){
-        //    hand.set(i, deck.get(0));
-        //    deck.remove(0);
+        for(int i = hand.size(); i==7; i++) {
+            int indxe = gen.nextInt(deck.size());
+            hand.set(i, deck.get(indxe));
+            deck.remove(indxe);
+        }
     }
 
     public void attack(int atkIndx, int defIndx){
