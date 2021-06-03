@@ -10,9 +10,17 @@ public class CardCollection  {
     ArrayList<Card> AIdeck = new ArrayList<>();
     private final int[] LandCost = new int[]{0, 0, 0, 0, 0, 0};
     int[] tmhkCost = new int[]{2, 0, 0, 0, 0, 0};
+    int[] sMCost = new int[]{0, 2, 0, 0, 0, 0};
+    int[] wsWCost = new int[]{0, 0, 8, 0, 0, 0};
+    int[] gsbCost = new int[]{0, 0, 0, 0, 4, 0};
+    int[] sACost = new int[]{0, 0, 0, 2, 0, 0};
     private int limit;
     Random gen = new Random();
     Card thundermawhellkite = new Card("Thundermaw Hellkite", 5, 5, tmhkCost, false, true);
+    Card serraAngel = new Card("Serra Angel", 4, 4, sACost, false, true);
+    Card seaMonster = new Card("Sea Monster", 6, 6, sMCost, false, false);
+    Card worldspineWurm = new Card("Worldspine Wurm", 15, 15, wsWCost, true, false);
+    Card griselbrand = new Card("Griselbrand", 7, 7, gsbCost, false, true);
     private int[] totalMana = new int[]{0, 0, 0, 0, 0, 0};
     private int[] AItotalMana = new int[]{0, 0, 0, 0, 0, 0};
     Card mountainsPlaceholder = new Card("Mountains", 0, 0, LandCost, false, false);
@@ -28,10 +36,10 @@ public class CardCollection  {
     public CardCollection () {
         for(int h = 0; h<10; h++){
             deck.add(thundermawhellkite);
-            deck.add(thundermawhellkite);
-            deck.add(thundermawhellkite);
-            deck.add(thundermawhellkite);
-            deck.add(thundermawhellkite);
+            deck.add(serraAngel);
+            deck.add(seaMonster);
+            deck.add(worldspineWurm);
+            deck.add(griselbrand);
             deck.add(mountainsPlaceholder);
             deck.add(islandPlaceholder);
             deck.add(forestPlaceholder);
@@ -40,10 +48,10 @@ public class CardCollection  {
         }
         for(int h = 0; h<10; h++){
             AIdeck.add(thundermawhellkite);
-            AIdeck.add(thundermawhellkite);
-            AIdeck.add(thundermawhellkite);
-            AIdeck.add(thundermawhellkite);
-            AIdeck.add(thundermawhellkite);
+            AIdeck.add(serraAngel);
+            AIdeck.add(seaMonster);
+            AIdeck.add(worldspineWurm);
+            AIdeck.add(griselbrand);
             AIdeck.add(mountainsPlaceholder);
             AIdeck.add(islandPlaceholder);
             AIdeck.add(forestPlaceholder);
