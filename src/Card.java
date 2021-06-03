@@ -37,17 +37,17 @@ public class Card {
 
     public boolean isEnoughMana(int[] totalMana) {
         for (int t = 0; t < 6; t++) {
-            if (totalMana[t] - manaCost[t] >= 0) {
-                totalMana[t] -= manaCost[t];
+            if (totalMana[t] - manaCost[t] < 0) {
+                return false;
             }
-            else return false;
         }
-        int uncolored = 0;
-        for (int z = 0; z <= 4; z++) {
-            uncolored += totalMana[z];
-        }
-        if (uncolored >= manaCost[5]) return true;
-        else return false;
+        return true;
+        //int uncolored = 0;
+        //for (int z = 0; z <= 4; z++) {
+        //    uncolored += totalMana[z];
+        //}
+        //if (uncolored >= manaCost[5]) return true;
+        //else return false;
     }
 
     public String toString() {

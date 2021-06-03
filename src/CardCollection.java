@@ -86,6 +86,10 @@ public class CardCollection  {
                 break;
             default:
                 if (hand.get(castNum).isEnoughMana(totalMana)) {
+                    for(int i = 0 ; i< totalMana.length; i++){
+
+                    }
+
                     PlayerBF.add(hand.get(castNum));
                     hand.remove(castNum);
                     System.out.println("you casted " + PlayerBF.get(PlayerBF.size() - 1).getName());
