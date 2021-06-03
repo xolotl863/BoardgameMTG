@@ -6,13 +6,16 @@ public class Card {
     private String name;
     private int count = 0;
     private int[] manaCost; //red blue green white black colorless
+    boolean isTrample, isFlying;
 
 
-    public Card(String title, int power, int toughness, int[] mana) {
+    public Card(String title, int power, int toughness, int[] mana, boolean trample, boolean flying) {
         name = title;
         strength = power;
         defense = toughness;
         manaCost = mana;
+        isTrample = trample;
+        isFlying = flying;
     }
 
     public int getStrength() { return strength; }
@@ -24,6 +27,8 @@ public class Card {
     public String getName() {
         return name;
     }
+    public boolean getTrample(){return isTrample;}
+    public boolean getFlying(){return isFlying;}
 
 
     public int[] getMana() {
@@ -31,10 +36,11 @@ public class Card {
     }
 
     public boolean isEnoughMana(int[] totalMana) {
-        for (int t = 0; t <= 4; t++) {
+        for (int t = 0; t < 6; t++) {
             if (totalMana[t] - manaCost[t] >= 0) {
                 totalMana[t] -= manaCost[t];
-            } else return false;
+            }
+            else return false;
         }
         int uncolored = 0;
         for (int z = 0; z <= 4; z++) {
