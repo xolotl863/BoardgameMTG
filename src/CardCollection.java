@@ -22,7 +22,9 @@ public class CardCollection  {
     Card worldspineWurm = new Card("Worldspine Wurm", 15, 15, wsWCost, true, false);
     Card griselbrand = new Card("Griselbrand", 7, 7, gsbCost, false, true);
     private int[] totalMana = new int[]{0, 0, 0, 0, 0, 0};
+    private int[] tappedMana = new int[]{0, 0, 0, 0, 0, 0};
     private int[] AItotalMana = new int[]{0, 0, 0, 0, 0, 0};
+    private int[] AItappedMana = new int[]{0, 0, 0, 0, 0, 0};
     Card mountainsPlaceholder = new Card("Mountains", 0, 0, LandCost, false, false);
     Card islandPlaceholder = new Card("Island", 0, 0, LandCost, false, false);
     Card forestPlaceholder = new Card("Forest", 0, 0, LandCost, false, false);
@@ -40,6 +42,11 @@ public class CardCollection  {
             deck.add(seaMonster);
             deck.add(worldspineWurm);
             deck.add(griselbrand);
+            deck.add(mountainsPlaceholder);
+            deck.add(islandPlaceholder);
+            deck.add(forestPlaceholder);
+            deck.add(plainsPlaceholder);
+            deck.add(swampPlaceholder);
             deck.add(mountainsPlaceholder);
             deck.add(islandPlaceholder);
             deck.add(forestPlaceholder);
@@ -87,7 +94,7 @@ public class CardCollection  {
             default:
                 if (hand.get(castNum).isEnoughMana(totalMana)) {
                     for(int i = 0 ; i< totalMana.length; i++){
-
+                        tappedMana[i] =  totalMana[i] - hand.get(castNum).getMana(i);
                     }
 
                     PlayerBF.add(hand.get(castNum));
@@ -200,6 +207,7 @@ public class CardCollection  {
     public int AIgetSwamps(){
         return AItotalMana[4];
     }
+
     public void draw(){
         for(int i = hand.size(); i < 7; i++) {
             int indxe = gen.nextInt(deck.size()-1);

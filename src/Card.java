@@ -34,6 +34,9 @@ public class Card {
     public int[] getMana() {
         return manaCost;
     }
+    public int getMana(int index){
+        return manaCost[index];
+    }
 
     public boolean isEnoughMana(int[] totalMana) {
         for (int t = 0; t < 6; t++) {

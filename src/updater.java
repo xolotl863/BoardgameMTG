@@ -23,13 +23,13 @@ public class updater {
         playerHP.setFill(Color.TRANSPARENT);
         playerHP.setStroke(Color.BLACK);
         root.getChildren().add(playerHP);
-        for(int i = 228; i < 1596; i=i*2){
+        for(int i = 228; i < 1596; i+=228){
             Rectangle hand = new Rectangle(i,775, 150, 250);
             hand.setStroke(Color.BLACK);
             hand.setFill(Color.RED);
             root.getChildren().add(hand);
         }
-        for(int x = 350; x < 1717; x=x*2){
+        for(int x = 350; x < 1717; x+=225){
             Text handST = new Text(x, 1020, ""+cardDeck.hand.get((x/350)-1).getStrength() + "/" + cardDeck.hand.get((x/350)-1).getToughness());
             root.getChildren().add(handST);
             Text handTitle = new Text(x-110, 800, ""+cardDeck.hand.get((x/350)-1).getName());

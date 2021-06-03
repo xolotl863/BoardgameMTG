@@ -9,7 +9,7 @@ public class textBoard {
         CardCollection cards = new CardCollection();
         int playerLife = 20, AIlife = 20, atkIndex = -1, defIndex = 0;
         Scanner scan = new Scanner(System.in);
-        boolean game = false, castingPhase1 = true, actionPhase1 = true, actionPhase2 = true,  castingPhase2 = true, attacking = true;
+        boolean game = true, castingPhase1 = true, actionPhase1 = true, actionPhase2 = true,  castingPhase2 = true, attacking = true;
 
 
         System.out.println("Which level of AI");
@@ -395,7 +395,7 @@ public class textBoard {
                             break;
                         }
                         case "NO BLOCK": {
-                            playerLife -= cards.attackNoDef(atkIndex);
+                            playerLife -= cards.AIattackNoDef(atkIndex);
                             actionPhase1 = false;
                             break;
                         }
