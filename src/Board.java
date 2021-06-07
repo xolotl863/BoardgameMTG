@@ -2,6 +2,10 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -14,29 +18,56 @@ public class Board extends Application {
     ArrayList<Card> filler;
     CardCollection cards = new CardCollection();
     private int playerLife = 20, AIlife = 20;
-    private int greenCounter = 0, whiteCounter = 0, blackCounter = 0, redCounter = 0, blueCounter = 0;
     Scanner scan = new Scanner(System.in);
-    boolean game = true, castingPhase = true, actionPhase = true;
-    int atkIndex = -1;
-
+    int atkIndex = -1, defIndex = 0;
+    int AILevel = 0;
+    boolean game = true, castingPhase1 = true, actionPhase1 = true, actionPhase2 = true, castingPhase2 = true, attacking = true;
 
     public void start(Stage primaryStage) {
 
 
-        updater updater = new updater(root, filler, playerLife, AIlife);
 
         Scene scene = new Scene(root, 1920, 1080, Color.rgb(148, 235, 234));
         //scene.setOnMousePressed(this::processMousePressed);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        //System.out.println("Which level of AI");
+        String p = "2 player";//scan.nextLine();
+        switch (p.toUpperCase()) {
+            default:{
+                System.out.println("invalid");
+                break;
+            }
+            case "2 PLAYER": {
+                AILevel = 0;
+                break;
+            }
+            case "1": {
+                AILevel = 1;
+                break;
+            }
+            case "2": {
+                AILevel = 2;
+                break;
+            }
+            case "3": {
+                AILevel = 3;
+                break;
+            }
+        }
         while (game) {
             if (cards.handFull()) {
                 cards.draw();
             }
-            while (castingPhase) {
-                actionPhase = true;
+            if (cards.AIhandFull()) {
+                cards.AIdraw();
+            }
+            updater updater = new updater(root, cards.hand, cards.deck,cards.AIhand, cards.AIdeck, cards.getTotalMana(), cards.AIgetTotalMana(), playerLife, AIlife);
 
-                String x = scan.nextLine();
+            while (castingPhase1) {
+                castingPhase2 = true;
+                String x = "end phase";
                 switch (x.toUpperCase()) {
                     default: {
                         System.out.println("invalid");
@@ -76,18 +107,26 @@ public class Board extends Application {
                         break;
                     }
                     case "END PHASE": {
-                        castingPhase = false;
+                        castingPhase1 = false;
                         break;
                     }
                 }
             }
-            while (actionPhase) {
-                castingPhase = true;
+            while (castingPhase2) {
+                actionPhase1 = true;
+                if(cards.getAIHand() > 0) {
+                    cards.AIcast(cards.AIgetCast(AILevel));
+                }
+                castingPhase2 = false;
+            }
+            while (actionPhase1) {
+                actionPhase2 = true;
                 System.out.println("Player 1, which card would you like to attack with");
                 String x = scan.nextLine();
                 switch (x.toUpperCase()) {
                     default:
                         System.out.println("invalid");
+                        break;
 
                     case "1": {
                         atkIndex = 0;
@@ -130,66 +169,49 @@ public class Board extends Application {
                         break;
                     }
                     case "NO ATTACK": {
-                        actionPhase = false;
+                        attacking = false;
+                        actionPhase1 = false;
                         break;
                     }
                 }
-                if(atkIndex >= 0) {
-                    System.out.println("Player 2, which card would you like to block with");
-                    String y = scan.nextLine();
-                    switch (y.toUpperCase()) {
-                        default:
-                            System.out.println("invalid");
-
-                        case "0": {
-                            cards.attack(atkIndex, 0);
-                            actionPhase = false;
-                            break;
-                        }
-                        case "1": {
-                            cards.attack(atkIndex, 1);
-                            actionPhase = false;
-                            break;
-                        }
-                        case "2": {
-                            cards.attack(atkIndex, 2);
-                            actionPhase = false;
-                            break;
-                        }
-                        case "3": {
-                            cards.attack(atkIndex, 3);
-                            actionPhase = false;
-                            break;
-                        }
-                        case "4": {
-                            cards.attack(atkIndex, 4);
-                            actionPhase = false;
-                            break;
-                        }
-                        case "5": {
-                            cards.attack(atkIndex, 5);
-                            actionPhase = false;
-                            break;
-                        }
-                        case "6": {
-                            cards.attack(atkIndex, 6);
-                            actionPhase = false;
-                            break;
-                        }
-                        case "NO BLOCK": {
-                            AIlife -= cards.attackNoDef(atkIndex);
-                            actionPhase = false;
-                            break;
-                        }
-                    }
-                    if (playerLife <= 0) {
-                        game = false;
-                        System.out.println("Player 2 wins");
-                    } else if (AIlife <= 0) {
-                        game = false;
-                        System.out.println("Player 1 wins");
-                    }
+                if (attacking) {
+                    if (cards.getAIBFSize() > 0) {
+                        cards.attack(atkIndex, cards.AIgetBlock(AILevel));
+                    } else
+                        System.out.println("No defense possible");
+                    AIlife -= cards.attackNoDef(atkIndex);
+                    actionPhase1 = false;
                 }
+            }
+            while (actionPhase2) {
+                castingPhase1 = true;
+                if (cards.getPlayerBF() <= 0 && cards.getAIBFSize() > 0) {
+                    playerLife -= cards.AIgetAttackNoDef(AILevel);
+                } else if (cards.getAIBFSize() > 0) {
+                    cards.AIgetAttack(AILevel);
+                } else {
+                    System.out.println("No attacks possible");
+                    actionPhase2 = false;
+                }
+            }
+            if (atkIndex >= 0) {
+                if (cards.AIBF.get(atkIndex).getTrample()) {
+                    playerLife -= cards.AIattackTrample(atkIndex, defIndex);
+                }
+                else if (cards.getAIBFSize() > 0) {
+                    cards.AIgetAttack(AILevel);
+                } else playerLife -= cards.AIattackNoDef(atkIndex);
+            }
+            if (playerLife <= 0) {
+                game = false;
+                Text end = new Text("Player 2 wins");
+                end.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 200));
+                root.getChildren().add(end);
+            } else if (AIlife <= 0) {
+                game = false;
+                Text end2 = new Text(200, 200, "Player 1 wins");
+                end2.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 200));
+                root.getChildren().add(end2);
             }
         }
     }

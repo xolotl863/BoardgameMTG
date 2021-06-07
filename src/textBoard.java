@@ -9,25 +9,34 @@ public class textBoard {
         CardCollection cards = new CardCollection();
         int playerLife = 20, AIlife = 20, atkIndex = -1, defIndex = 0;
         Scanner scan = new Scanner(System.in);
-        boolean game = true, castingPhase1 = true, actionPhase1 = true, actionPhase2 = true,  castingPhase2 = true, attacking = true;
+        int AILevel = 0;
+        boolean game = true, castingPhase1 = true, actionPhase1 = true, actionPhase2 = true, castingPhase2 = true, attacking = true;
 
 
         System.out.println("Which level of AI");
-            String p = scan.nextLine();
-            switch (p.toUpperCase()){
-                case "2 PLAYER" : {
-                    //current
-                }
-                case "1" : {
-                    //always does 1 then 2 etc
-                }
-                case "2" : {
-                    //random inputs
-                }
-                case "3" : {
-                    //analyzes which move is best
-                }
+        String p = scan.nextLine();
+        switch (p.toUpperCase()) {
+            default:{
+                System.out.println("invalid");
+                break;
+        }
+            case "2 PLAYER": {
+                AILevel = 0;
+                break;
             }
+            case "1": {
+                AILevel = 1;
+                break;
+            }
+            case "2": {
+                AILevel = 2;
+                break;
+            }
+            case "3": {
+                AILevel = 3;
+                break;
+            }
+        }
         while (game) {
             if (cards.handFull()) {
                 cards.draw();
@@ -56,11 +65,11 @@ public class textBoard {
                     System.out.println("" + cards.AIBF.get(i).toString());
                 }
                 System.out.println("\n");
-                System.out.println("Swamps:" + cards.getSwamps());
-                System.out.println("Plains:" + cards.getPlains());
                 System.out.println("Mountains:" + cards.getMountains());
                 System.out.println("Islands:" + cards.getIslands());
                 System.out.println("Forests:" + cards.getForests());
+                System.out.println("Swamps:" + cards.getSwamps());
+                System.out.println("Plains:" + cards.getPlains());
                 System.out.println("which card would you like to play");
                 String x = scan.nextLine();
                 switch (x.toUpperCase()) {
@@ -107,314 +116,128 @@ public class textBoard {
                     }
                 }
             }
-                while (castingPhase2) {
-                    actionPhase1 = true;
-                    System.out.println("Your HP is " + AIlife);
-                    System.out.println("Your hand is ");
-                    for (int i = 0; i < cards.AIhand.size(); i++) {
-                        System.out.println("" + cards.AIhand.get(i).toString());
-                    }
-                    System.out.println("Player 1 HP is " + playerLife);
-                    System.out.println("Player 1  hand is ");
-                    for (int i = 0; i < cards.hand.size(); i++) {
-                        System.out.println("" + cards.hand.get(i).toString());
-                    }
-                    System.out.println("Your battlefield is ");
-                    for (int i = 0; i < cards.AIBF.size(); i++) {
-                        System.out.println("" + cards.AIBF.get(i).toString());
-                    }
-                    System.out.println("Player 1 battlefield is ");
-                    for (int i = 0; i < cards.PlayerBF.size(); i++) {
-                        System.out.println("" + cards.PlayerBF.get(i).toString());
-                    }
-                    System.out.println("\n");
-                    System.out.println("Swamps:" + cards.AIgetSwamps());
-                    System.out.println("Plains:" + cards.AIgetPlains());
-                    System.out.println("Mountains:" + cards.AIgetMountains());
-                    System.out.println("Islands:" + cards.AIgetIslands());
-                    System.out.println("Forests:" + cards.AIgetForests());
-                    System.out.println("which card would you like to play");
-                    String x = scan.nextLine();
-                    switch (x.toUpperCase()) {
-                        default: {
-                            System.out.println("invalid");
-                            break;
-                        }
-                        case "0": {
-                            cards.AIcast(0);
-                            break;
-                        }
-                        case "1": {
-                            cards.AIcast(1);
-                            break;
-                        }
-                        case "2": {
-                            cards.AIcast(2);
-                            break;
-                        }
-                        case "3": {
-                            cards.AIcast(3);
-                            break;
-                        }
-                        case "4": {
-                            cards.AIcast(4);
-                            break;
-                        }
-                        case "5": {
-                            cards.AIcast(5);
-                            break;
-                        }
-                        case "6": {
-                            cards.AIcast(6);
-                            break;
-                        }
-                        case "REDRAW": {
-                            cards.AIhand.clear();
-                            cards.AIdraw();
-                            break;
-                        }
-                        case "END PHASE": {
-                            castingPhase2 = false;
-                            break;
-                        }
-                    }
+            while (castingPhase2) {
+                actionPhase1 = true;
+                System.out.println("Your HP is " + AIlife);
+                System.out.println("Your hand is ");
+                for (int i = 0; i < cards.AIhand.size(); i++) {
+                    System.out.println("" + cards.AIhand.get(i).toString());
+                }
+                System.out.println("Player 1 HP is " + playerLife);
+                System.out.println("Player 1  hand is ");
+                for (int i = 0; i < cards.hand.size(); i++) {
+                    System.out.println("" + cards.hand.get(i).toString());
+                }
+                System.out.println("Your battlefield is ");
+                for (int i = 0; i < cards.AIBF.size(); i++) {
+                    System.out.println("" + cards.AIBF.get(i).toString());
+                }
+                System.out.println("Player 1 battlefield is ");
+                for (int i = 0; i < cards.PlayerBF.size(); i++) {
+                    System.out.println("" + cards.PlayerBF.get(i).toString());
+                }
+                System.out.println("\n");
+                System.out.println("Swamps:" + cards.AIgetSwamps());
+                System.out.println("Plains:" + cards.AIgetPlains());
+                System.out.println("Mountains:" + cards.AIgetMountains());
+                System.out.println("Islands:" + cards.AIgetIslands());
+                System.out.println("Forests:" + cards.AIgetForests());
+                if(cards.getAIHand() > 0) {
+                    cards.AIcast(cards.AIgetCast(AILevel));
+                }
+                castingPhase2 = false;
             }
-            while (actionPhase1) {
-                actionPhase2 = true;
-                System.out.println("Player 1, which card would you like to attack with");
-                String x = scan.nextLine();
-                switch (x.toUpperCase()) {
-                    default:
-                        System.out.println("invalid");
+        while (actionPhase1) {
+            actionPhase2 = true;
+            System.out.println("Player 1, which card would you like to attack with");
+            String x = scan.nextLine();
+            switch (x.toUpperCase()) {
+                default:
+                    System.out.println("invalid");
+                    break;
 
-                    case "1": {
-                        atkIndex = 0;
-                        break;
-                    }
-                    case "2": {
-                        atkIndex = 1;
-                        break;
-                    }
-                    case "3": {
-                        atkIndex = 2;
-                        break;
-                    }
-                    case "4": {
-                        atkIndex = 3;
-                        break;
-                    }
-                    case "5": {
-                        atkIndex = 4;
-                        break;
-                    }
-                    case "6": {
-                        atkIndex = 5;
-                        break;
-                    }
-                    case "7": {
-                        atkIndex = 6;
-                        break;
-                    }
-                    case "8": {
-                        atkIndex = 7;
-                        break;
-                    }
-                    case "9": {
-                        atkIndex = 8;
-                        break;
-                    }
-                    case "10": {
-                        atkIndex = 9;
-                        break;
-                    }
-                    case "NO ATTACK": {
-
-                        attacking = false;
-                        actionPhase1 = false;
-                        break;
-                    }
+                case "1": {
+                    atkIndex = 0;
+                    break;
                 }
-                if (attacking) {
-                    System.out.println("Player 2, which card would you like to block with");
-                    String y = scan.nextLine();
-                    switch (y.toUpperCase()) {
-                        default:
-                            System.out.println("invalid");
-
-                        case "0": {
-                            defIndex = 0;
-                            cards.attack(atkIndex, defIndex);
-                            if(cards.PlayerBF.get(atkIndex).getTrample()){
-                                playerLife -= cards.attackTrample(atkIndex, defIndex);
-                            }
-                            break;
-                        }
-                        case "1": {
-                            defIndex = 1;
-                            cards.attack(atkIndex, defIndex);
-                            if(cards.PlayerBF.get(atkIndex).getTrample()){
-                                playerLife -= cards.attackTrample(atkIndex, defIndex);
-                            }
-                            break;
-                        }
-                        case "2": {
-                            defIndex = 2;
-                            cards.attack(atkIndex, defIndex);
-                            if(cards.PlayerBF.get(atkIndex).getTrample()){
-                                playerLife -= cards.attackTrample(atkIndex, defIndex);
-                            }
-                            break;
-                        }
-                        case "3": {
-                            defIndex = 3;
-                            cards.attack(atkIndex, defIndex);
-                            if(cards.PlayerBF.get(atkIndex).getTrample()){
-                                playerLife -= cards.attackTrample(atkIndex, defIndex);
-                            }
-                            break;
-                        }
-                        case "4": {
-                            defIndex = 4;
-                            cards.attack(atkIndex, defIndex);
-                            if(cards.PlayerBF.get(atkIndex).getTrample()){
-                                playerLife -= cards.attackTrample(atkIndex, defIndex);
-                            }
-                            break;
-                        }
-                        case "5": {
-                            defIndex = 5;
-                            cards.attack(atkIndex, defIndex);
-                            if(cards.PlayerBF.get(atkIndex).getTrample()){
-                                playerLife -= cards.attackTrample(atkIndex, defIndex);
-                            }
-                            break;
-                        }
-                        case "6": {
-                            defIndex = 6;
-                            cards.attack(atkIndex, defIndex);
-                            if(cards.PlayerBF.get(atkIndex).getTrample()){
-                                playerLife -= cards.attackTrample(atkIndex, defIndex);
-                            }
-                            break;
-                        }
-                        case "NO BLOCK": {
-                            AIlife -= cards.attackNoDef(atkIndex);
-                            actionPhase1 = false;
-                            break;
-                        }
-                    }
-                        actionPhase1 = false;
+                case "2": {
+                    atkIndex = 1;
+                    break;
                 }
-            }
-            while (actionPhase2) {
-                castingPhase1 = true;
-                System.out.println("Player 2, which card would you like to attack with");
-                String x = scan.nextLine();
-                switch (x.toUpperCase()) {
-                    default:
-                        System.out.println("invalid");
-
-                    case "1": {
-                        atkIndex = 0;
-                        break;
-                    }
-                    case "2": {
-                        atkIndex = 1;
-                        break;
-                    }
-                    case "3": {
-                        atkIndex = 2;
-                        break;
-                    }
-                    case "4": {
-                        atkIndex = 3;
-                        break;
-                    }
-                    case "5": {
-                        atkIndex = 4;
-                        break;
-                    }
-                    case "6": {
-                        atkIndex = 5;
-                        break;
-                    }
-                    case "7": {
-                        atkIndex = 6;
-                        break;
-                    }
-                    case "8": {
-                        atkIndex = 7;
-                        break;
-                    }
-                    case "9": {
-                        atkIndex = 8;
-                        break;
-                    }
-                    case "10": {
-                        atkIndex = 9;
-                        break;
-                    }
-                    case "NO ATTACK": {
-                        actionPhase2 = false;
-                        break;
-                    }
+                case "3": {
+                    atkIndex = 2;
+                    break;
                 }
-                if (atkIndex >= 0) {
-                    System.out.println("Player 1, which card would you like to block with");
-                    String y = scan.nextLine();
-                    switch (y.toUpperCase()) {
-                        default:
-                            System.out.println("invalid");
-
-                        case "0": {
-                            defIndex = 0;
-                            break;
-                        }
-                        case "1": {
-                            defIndex = 1;
-                            break;
-                        }
-                        case "2": {
-                            defIndex = 2;
-                            break;
-                        }
-                        case "3": {
-                            defIndex = 3;
-                            break;
-                        }
-                        case "4": {
-                            defIndex = 4;
-                            break;
-                        }
-                        case "5": {
-                            defIndex = 5;
-                            break;
-                        }
-                        case "6": {
-                            defIndex = 6;
-                            break;
-                        }
-                        case "NO BLOCK": {
-                            playerLife -= cards.AIattackNoDef(atkIndex);
-                            actionPhase1 = false;
-                            break;
-                        }
-                    }
-                    cards.AIattack(atkIndex, defIndex);
-                    if(cards.AIBF.get(atkIndex).getTrample()){
-                        playerLife -= cards.AIattackTrample(atkIndex, defIndex);
-                    }
+                case "4": {
+                    atkIndex = 3;
+                    break;
+                }
+                case "5": {
+                    atkIndex = 4;
+                    break;
+                }
+                case "6": {
+                    atkIndex = 5;
+                    break;
+                }
+                case "7": {
+                    atkIndex = 6;
+                    break;
+                }
+                case "8": {
+                    atkIndex = 7;
+                    break;
+                }
+                case "9": {
+                    atkIndex = 8;
+                    break;
+                }
+                case "10": {
+                    atkIndex = 9;
+                    break;
+                }
+                case "NO ATTACK": {
+                    attacking = false;
                     actionPhase1 = false;
+                    break;
                 }
-                    }
-                    if (playerLife <= 0) {
-                        game = false;
-                        System.out.println("Player 2 wins");
-                    } else if (AIlife <= 0) {
-                        game = false;
-                        System.out.println("Player 1 wins");
-                    }
-                }
+            }
+            if (attacking) {
+                if (cards.getAIBFSize() > 0) {
+                    cards.attack(atkIndex, cards.AIgetBlock(AILevel));
+                } else
+                    System.out.println("No defense possible");
+                AIlife -= cards.attackNoDef(atkIndex);
+                actionPhase1 = false;
+            }
+        }
+        while (actionPhase2) {
+            castingPhase1 = true;
+            if (cards.getPlayerBF() <= 0 && cards.getAIBFSize() > 0) {
+                playerLife -= cards.AIgetAttackNoDef(AILevel);
+            } else if (cards.getAIBFSize() > 0) {
+                cards.AIgetAttack(AILevel);
+            } else {
+                System.out.println("No attacks possible");
+                actionPhase2 = false;
+            }
+        }
+        if (atkIndex >= 0) {
 
+            if (cards.getAIBFSize() > 0) {
+                cards.AIgetAttack(AILevel);
+            } else playerLife -= cards.AIattackNoDef(atkIndex);
+            if (cards.AIBF.get(atkIndex).getTrample()) {
+                playerLife -= cards.AIattackTrample(atkIndex, defIndex);
+            }
+        }
+        if (playerLife <= 0) {
+            game = false;
+            System.out.println("Player 2 wins");
+        } else if (AIlife <= 0) {
+            game = false;
+            System.out.println("Player 1 wins");
+        }
     }
-}
+        }
+    }

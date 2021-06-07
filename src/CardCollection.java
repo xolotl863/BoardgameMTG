@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class CardCollection  {
     ArrayList<Card> hand = new ArrayList<>();
@@ -15,6 +16,7 @@ public class CardCollection  {
     int[] gsbCost = new int[]{0, 0, 0, 0, 4, 0};
     int[] sACost = new int[]{0, 0, 0, 2, 0, 0};
     private int limit;
+    Scanner scan = new Scanner(System.in);
     Random gen = new Random();
     Card thundermawhellkite = new Card("Thundermaw Hellkite", 5, 5, tmhkCost, false, true);
     Card serraAngel = new Card("Serra Angel", 4, 4, sACost, false, true);
@@ -126,10 +128,36 @@ public class CardCollection  {
                 if (AIhand.get(castNum).isEnoughMana(AItotalMana)) {
                     AIBF.add(AIhand.get(castNum));
                     AIhand.remove(castNum);
+                    for(int i = 0 ; i < AItotalMana.length; i++){
+                        AItappedMana[i] = AIhand.get(castNum).getMana(i);
+                        AItotalMana[i] -= AIhand.get(castNum).getMana(i);
+                    }
                     System.out.println("you casted " + AIBF.get(AIBF.size() - 1).getName());
                 } else System.out.println("Not enough mana");
                 break;
         }
+    }
+
+    public int AIgetCast(int AIlevel){
+        int castNum = 12;
+        if(AIlevel == 0){
+            System.out.println("Player 2, which card would you like to attack with");
+             castNum = scan.nextInt();
+        }
+        else if(AIlevel == 1) {
+            castNum = 0;
+        }
+        else if(AIlevel == 2){
+            castNum = gen.nextInt(AIhand.size());
+        }
+        else if(AIlevel == 3){
+            for(int x = 0; x < AIhand.size(); x++){
+                if(hand.get(x).isEnoughMana(totalMana) && hand.get(castNum).getStrength() < hand.get(x).getStrength()){
+                    castNum = x;
+                }
+            }
+        }
+        return castNum;
     }
 
 
@@ -208,6 +236,13 @@ public class CardCollection  {
         return AItotalMana[4];
     }
 
+    public int[] getTotalMana(){
+        return totalMana;
+    }
+    public int[] AIgetTotalMana(){
+        return AItotalMana;
+    }
+
     public void draw(){
         for(int i = hand.size(); i < 7; i++) {
             int indxe = gen.nextInt(deck.size()-1);
@@ -235,10 +270,62 @@ public class CardCollection  {
         return AIBF.get(atkIndx).getStrength() - PlayerBF.get(defIndx).getToughness();
     }
 
-    public void AIattack(int atkIndx, int defIndx){
-        if(AIBF.get(atkIndx).getStrength() > PlayerBF.get(defIndx).getToughness()) {
-            PlayerBF.remove(defIndx);
+    public void AIgetAttack(int AIlevel){
+        if(AIlevel == 0){
+            System.out.println("Player 2, which card would you like to attack with");
+            int atkIndx = scan.nextInt();
+            System.out.println("Player 1, who do you want to defend with");
+            int defIndx = scan.nextInt();
+            if(AIBF.get(atkIndx).getStrength() > PlayerBF.get(defIndx).getToughness()) {
+                PlayerBF.remove(defIndx);
+            }
         }
+        else if(AIlevel == 1){
+            int atkIndx = 0;
+            System.out.println("Player 2 is attacking with " + AIBF.get(atkIndx).getName());
+            System.out.println("Player 1, which card do you want to defend with");
+            int defIndx = scan.nextInt();
+            if(AIBF.get(atkIndx).getStrength() > PlayerBF.get(defIndx).getToughness()) {
+                PlayerBF.remove(defIndx);
+            }
+        }
+        else if(AIlevel == 2){
+            int atkIndx = gen.nextInt(AIBF.size()-1);
+            System.out.println("Player 2 is attacking with " + AIBF.get(atkIndx).getName());
+            System.out.println("Player 1, which card do you want to defend with");
+            int defIndx = scan.nextInt();
+            if(AIBF.get(atkIndx).getStrength() > PlayerBF.get(defIndx).getToughness()) {
+                PlayerBF.remove(defIndx);
+            }
+        }
+    }
+    public int AIgetAttackNoDef(int AIlevel){
+        int atkIndx = 0;
+        if(AIlevel == 0){
+            System.out.println("Player 2, which card would you like to attack with");
+            atkIndx = scan.nextInt();
+        }
+        else if(AIlevel == 1){
+            atkIndx = 0;
+            System.out.println("Player 2 is attacking with " + AIBF.get(atkIndx).getName());
+        }
+        else if(AIlevel == 2){
+            atkIndx = gen.nextInt(AIBF.size()-1);
+        }
+        return atkIndx;
+    }
+    public int AIgetBlock(int AIlevel){
+        int defIndx = 0;
+        if(AIlevel == 0){
+            System.out.println("Player 2, which card would you like to block with");
+            defIndx = scan.nextInt();
+        }
+        else if(AIlevel == 1){
+        }
+        else if(AIlevel == 2){
+            defIndx = gen.nextInt(AIBF.size()-1);
+        }
+        return defIndx;
     }
 
 
@@ -254,6 +341,15 @@ public class CardCollection  {
     public int getLimit()
     {
         return limit;
+    }
+    public int getAIBFSize(){
+        return AIBF.size();
+    }
+    public int getPlayerBF(){
+        return PlayerBF.size();
+    }
+    public int getAIHand(){
+        return AIhand.size();
     }
 
     public String toString() {
