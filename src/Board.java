@@ -33,7 +33,7 @@ public class Board extends Application {
         primaryStage.show();
 
         //System.out.println("Which level of AI");
-        String p = "2 player";//scan.nextLine();
+        String p = "1";//scan.nextLine();
         switch (p.toUpperCase()) {
             default:{
                 System.out.println("invalid");
@@ -122,7 +122,7 @@ public class Board extends Application {
             while (actionPhase1) {
                 actionPhase2 = true;
                 System.out.println("Player 1, which card would you like to attack with");
-                String x = scan.nextLine();
+                String x = "no attack";
                 switch (x.toUpperCase()) {
                     default:
                         System.out.println("invalid");
