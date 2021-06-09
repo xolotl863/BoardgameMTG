@@ -56,7 +56,7 @@ public class Board extends Application {
                 break;
             }
         }
-        while (game) {
+        //while (game) {
             if (cards.handFull()) {
                 cards.draw();
             }
@@ -214,7 +214,7 @@ public class Board extends Application {
                 root.getChildren().add(end2);
             }
         }
-    }
+    //}
 
 
     public static void main(String[] args)
